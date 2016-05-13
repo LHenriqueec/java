@@ -23,6 +23,7 @@ import java.util.Map;
 
 import br.com.uol.pagseguro.exception.PagSeguroServiceException;
 import br.com.uol.pagseguro.properties.PagSeguroConfig;
+import br.com.uol.pagseguro.utils.Validation;
 
 /**
  * Represents an application identification
@@ -73,9 +74,8 @@ public class ApplicationCredentials extends Credentials {
     public ApplicationCredentials(String productionAppId, String productionAppKey, String sandboxAppId,
             String sandboxAppKey, String authorizationCode) throws PagSeguroServiceException {
 
-        if (productionAppId == null || "".equals(productionAppId.trim()) && productionAppKey == null
-                || "".equals(productionAppKey.trim()) || sandboxAppId == null || "".equals(sandboxAppId.trim())
-                || sandboxAppKey == null || "".equals(sandboxAppKey.trim())) {
+        if (Validation.isInvalid(sandboxAppId) && Validation.isInvalid(productionAppKey) || Validation.isInvalid(sandboxAppId)
+                || Validation.isInvalid(sandboxAppKey)) {
             throw new PagSeguroServiceException("Application Credentials not set correctly.");
         }
 
@@ -83,8 +83,7 @@ public class ApplicationCredentials extends Credentials {
         this.productionAppKey = productionAppKey.trim();
         this.sandboxAppId = sandboxAppId.trim();
         this.sandboxAppKey = sandboxAppKey.trim();
-        this.authorizationCode = authorizationCode != null && !"".equals(authorizationCode.trim()) ? authorizationCode
-                .trim() : null;
+        this.authorizationCode = Validation.isInvalid(authorizationCode) ? null : authorizationCode;
     }
 
     /**
@@ -117,7 +116,7 @@ public class ApplicationCredentials extends Credentials {
     public ApplicationCredentials(String appId, String appKey, String authorizationCode)
             throws PagSeguroServiceException {
 
-        if (appId == null || "".equals(appId.trim()) && appKey == null || "".equals(appKey.trim())) {
+        if (Validation.isInvalid(appId) && Validation.isInvalid(appKey)) {
             throw new PagSeguroServiceException("Application Credentials not set correctly.");
         }
 
@@ -129,8 +128,7 @@ public class ApplicationCredentials extends Credentials {
             this.productionAppKey = appKey.trim();
         }
 
-        this.authorizationCode = authorizationCode != null && !"".equals(authorizationCode.trim()) ? authorizationCode
-                .trim() : null;
+        this.authorizationCode = Validation.isInvalid(authorizationCode) ? null : authorizationCode;
     }
 
     /**
@@ -224,8 +222,7 @@ public class ApplicationCredentials extends Credentials {
         Map<Object, Object> attributeMap = new HashMap<Object, Object>(HASH_SIZE);
 
         if (PagSeguroConfig.isSandboxEnvironment()) {
-            if (this.sandboxAppId == null || "".equals(this.sandboxAppId) || this.sandboxAppKey == null
-                    || "".equals(this.sandboxAppKey)) {
+            if (Validation.isInvalid(sandboxAppId) || Validation.isInvalid(sandboxAppKey)) {
                 throw new PagSeguroServiceException("Sandbox credentials not set.");
             }
             attributeMap.put("appId", this.sandboxAppId);
@@ -235,7 +232,7 @@ public class ApplicationCredentials extends Credentials {
             attributeMap.put("appKey", this.productionAppKey);
         }
 
-        if (this.authorizationCode != null && !"".equals(this.authorizationCode)) {
+        if (!Validation.isInvalid(authorizationCode)) {
             attributeMap.put("authorizationCode", this.authorizationCode);
         }
 

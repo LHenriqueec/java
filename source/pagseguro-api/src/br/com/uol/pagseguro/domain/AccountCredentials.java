@@ -56,7 +56,7 @@ public class AccountCredentials extends Credentials {
      *            the production pagseguro account security token. A sequence of 32 characters
      */
     public AccountCredentials(String email, String token) throws PagSeguroServiceException {
-        if (Validation.isValid(email) || Validation.isValid(token)) {
+        if (Validation.isInvalid(email) || Validation.isInvalid(token)) {
             throw new PagSeguroServiceException("Credentials not set.");
         }
 
@@ -77,7 +77,7 @@ public class AccountCredentials extends Credentials {
     public AccountCredentials(String email, String productionToken, String sandboxToken)
             throws PagSeguroServiceException {
 
-        if (Validation.isValid(email) || Validation.isValid(productionToken) || Validation.isValid(sandboxToken)) {
+        if (Validation.isInvalid(email) || Validation.isInvalid(productionToken) || Validation.isInvalid(sandboxToken)) {
             throw new PagSeguroServiceException("Credentials not set.");
         }
 
