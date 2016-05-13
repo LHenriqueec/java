@@ -23,6 +23,7 @@ import java.util.Map;
 
 import br.com.uol.pagseguro.exception.PagSeguroServiceException;
 import br.com.uol.pagseguro.properties.PagSeguroConfig;
+import br.com.uol.pagseguro.utils.Validation;
 
 /**
  * Represents an PagSeguro account identification
@@ -45,7 +46,7 @@ public class AccountCredentials extends Credentials {
      * PagSeguro sandbox account security token
      */
     private String sandboxToken;
-
+    
     /**
      * Initializes a newly created instance of this type with the specified arguments
      * 
@@ -55,8 +56,7 @@ public class AccountCredentials extends Credentials {
      *            the production pagseguro account security token. A sequence of 32 characters
      */
     public AccountCredentials(String email, String token) throws PagSeguroServiceException {
-
-        if (email == null || "".equals(email.trim()) || token == null || "".equals(token.trim())) {
+        if (Validation.isValid(email) || Validation.isValid(token)) {
             throw new PagSeguroServiceException("Credentials not set.");
         }
 
@@ -77,8 +77,7 @@ public class AccountCredentials extends Credentials {
     public AccountCredentials(String email, String productionToken, String sandboxToken)
             throws PagSeguroServiceException {
 
-        if (email == null || "".equals(email.trim()) || productionToken == null || "".equals(productionToken.trim())
-                || sandboxToken == null || "".equals(sandboxToken.trim())) {
+        if (Validation.isValid(email) || Validation.isValid(productionToken) || Validation.isValid(sandboxToken)) {
             throw new PagSeguroServiceException("Credentials not set.");
         }
 
